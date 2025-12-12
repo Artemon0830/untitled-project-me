@@ -3,15 +3,16 @@ services:
    build:
      context: .
    ports:
-     - "8888:5000"
+     - "8889:5000"
+     - "9229:9229"
    env_file:
      - ./backend/.env
    volumes:
      - ./backend:/app
-     - /app/node_modules
+#     - /app/node_modules
    restart: on-failure
    command: >
-     sh -c "npx ts-node src/app.ts"
+     sh -c "node --inspect=0.0.0.0:9229 -r ts-node/register src/app.ts"
 
  db:
   image: mongo

@@ -1,24 +1,14 @@
-import {NextFunction,Response,Request} from "express";
+import {NextFunction, Request, Response} from "express";
 
-import {IUser} from "../interfaces/user.interface"
-import {userService} from "../service/userService";
 
+import {userService} from "../service/user.service";
+import {IUser} from "../interfaces/user.interface";
 
 
 class UserController {
     async getUsers(req: Request, res: Response,next:NextFunction) {
         const result = await userService.getUsers();
         res.send(result)
-    }
-
-    async createUser(req: Request, res: Response,next:NextFunction) {
-        try {
-            const dto = req.body as IUser;
-            const result = await userService.createUser(dto);
-            res.status(201).send(result)
-        } catch (e) {
-            next(e)
-        }
     }
 
     async getUserById(req: Request, res: Response,next:NextFunction) {

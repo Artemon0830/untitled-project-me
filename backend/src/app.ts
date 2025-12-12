@@ -3,15 +3,22 @@ import * as mongoose from "mongoose";
 import {configs} from "./config/configs";
 import {userRouter} from "./routes/user.router";
 import {ApiError} from "./errors/api-error";
+import {authRouter} from "./routes/auth.router";
+import cors from 'cors';
+
+
 
 
 const app = express();
 
+
 app.use(express.json());
 
-
 app.use(express.urlencoded({ extended: true }));
-
+app.use(cors({
+    origin: '*'
+}));
+app.use('/auth',authRouter)
 app.use('/users',userRouter)
 // app.get('/', (req, res) => {
 //    res.send('Hello World!')
@@ -116,8 +123,12 @@ process.on("uncaughtException",(error)=>{
     console.error("uncaughtException",error.message,error.stack)
     process.exit(1)
 })
+const mongoUrl =
+    process.env.NODE_ENV === "development"
+        ? process.env.URI_MONGO_DB_DBG
+        : process.env.URI_MONGO_DB;
 
 app.listen(configs.APP_PORT, async () => {
-     await mongoose.connect(configs.URI_MONGO_DB);
+    await mongoose.connect(mongoUrl);
     console.log((`Server is running on http://${configs.APP_HOST}:${configs.APP_PORT}`));
 })

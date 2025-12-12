@@ -1,4 +1,5 @@
-import {RoleEnum} from "../enums/role.enum";
+
+ import {RoleEnum} from "../enums/role.enum";
 
 export interface IUser{
     _id?:string;
@@ -12,4 +13,8 @@ export interface IUser{
     isDeleted:boolean;
     createdAt?:Date;
     updatedAt?:Date;
+}
+
+export interface ISignIn extends Pick<IUser,'email' | 'password'>{
+
 }

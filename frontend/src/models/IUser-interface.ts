@@ -12,4 +12,6 @@ export interface IUserInterface {
     isDeleted:boolean;
     createdAt?:Date;
     updatedAt?:Date;
+    accessToken:string;
+    refreshToken:string;
 }
