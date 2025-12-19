@@ -10,7 +10,12 @@ const getAllUsers=():Promise<AxiosResponse<IUserInterface[]>> =>{
 }
 const getUser=(userId:number):Promise<AxiosResponse<IUserInterface>> =>{
     return axiosInstance.get('/users/'+ userId)
+} 
+const getAllArticles=():Promise<AxiosResponse<any>>=>{
+    return axiosInstance.get('/articles')
+}
+const getArticle=(articleId:number):Promise<AxiosResponse<any>>=>{
+    return axiosInstance.get('/articles'+articleId)
 }
 
-
-export {getAllUsers,getUser}
+export {getAllUsers,getUser,getAllArticles,getArticle}
