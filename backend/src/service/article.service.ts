@@ -1,30 +1,41 @@
+
+import {IProductArticle} from "../interfaces/article.interface";
+import {articleRepository} from "../repositories/article.repository";
+import {ITokenPayload} from "../interfaces/token.interface";
 import {IUser} from "../interfaces/user.interface";
 import {userRepository} from "../repositories/user.repository";
 import {ApiError} from "../errors/api-error";
-import {ITokenPayload} from "../interfaces/token.interface";
+
 
 
 class ArticleService {
-    async getArticles(): Promise<IUser[]> {
-        return  await userRepository.getUsers();
-    }
-    async getArticleById(articleId:string,jwtPayload:ITokenPayload):Promise<IUser> {
-        return await userRepository.getUserById(articleId);
-    }
-    async updateArticle(articleId:string, dto:IUser,jwtPayload:ITokenPayload):Promise<IUser> {
-        if(!dto.name || dto.name.length >3){
-            throw new ApiError("Name is required and should be at least 3 characters long",404)
+    async create(dto: IProductArticle, jwtPayload:ITokenPayload):Promise<{article:IProductArticle,user:IUser}> {
+        const user =await userRepository.getUserById(jwtPayload.userId)
+        if (!user){
+            throw new ApiError("User not found",404)
         }
-        if(!dto.email || !dto.email.includes("@")){
-            throw new ApiError("Email is required and should be valid", 400);
-        }
-        if (!dto.password || dto.password.length <6){
-            throw new ApiError("Password is required and should be at least 6 characters long",400)
-        }
-        return await userRepository.updateUserById(articleId, dto,);
+        const article= await articleRepository.create({...dto});
+        return {article,user}
     }
-    async deleteArticle(articleId:string,jwtPayload:ITokenPayload):Promise<void> {
-        return await userRepository.deleteUserById(articleId);
+
+    async getArticles():Promise<IProductArticle[]> {
+        return articleRepository.findAll();
+    }
+
+    async getArticleById(articleId: string, jwtPayload:ITokenPayload) {
+
+        return articleRepository.findByIdAndUser(articleId,jwtPayload.userId);
+    }
+
+    async updateArticle(articleId: string, jwtPayload:ITokenPayload, dto: Partial<IProductArticle>) {
+        // перевірка прав користувача
+        return articleRepository.update(articleId,jwtPayload.userId,dto);
+    }
+
+    async deleteArticle(articleId: string, jwtPayload:ITokenPayload) {
+        // перевірка прав користувача
+        return articleRepository.delete(articleId,jwtPayload.userId);
     }
 }
+
 export const articleService = new ArticleService();

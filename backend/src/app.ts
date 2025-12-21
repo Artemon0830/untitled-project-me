@@ -5,6 +5,7 @@ import {userRouter} from "./routes/user.router";
 import {ApiError} from "./errors/api-error";
 import {authRouter} from "./routes/auth.router";
 import cors from 'cors';
+import {articleRouter} from "./routes/article.router";
 
 
 
@@ -20,6 +21,7 @@ app.use(cors({
 }));
 app.use('/auth',authRouter)
 app.use('/users',userRouter)
+app.use('/articles',articleRouter)
 // app.get('/', (req, res) => {
 //    res.send('Hello World!')
 // })
