@@ -1,6 +1,6 @@
 FROM node:20-alpine
 
-MAINTAINER Artem Maksymuk
+MAINTAINER Artem
 
 RUN mkdir /app
 WORKDIR /app
