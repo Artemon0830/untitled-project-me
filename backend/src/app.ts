@@ -119,7 +119,11 @@ app.use('/articles',articleRouter)
 //
 // })
 app.use('*', (error:ApiError,req:Request, res:Response,next:NextFunction) => {
-    res.status(500).send({message: error.message})
+    try {
+        res.status(500).send({message: error.message})
+    } catch (e) {
+        next(e)
+    }
 })
 process.on("uncaughtException",(error)=>{
     console.error("uncaughtException",error.message,error.stack)
