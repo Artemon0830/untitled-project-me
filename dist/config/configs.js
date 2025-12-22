@@ -41,5 +41,7 @@ const dotenv_1 = __importDefault(require("dotenv"));
 const process = __importStar(require("process"));
 dotenv_1.default.config();
 exports.configs = {
-    APP_PORT: process.env.APP_PORT || 3001
+    APP_PORT: process.env.APP_PORT || 3001,
+    APP_HOST: process.env.APP_HOST || 'localhost',
+    URI_MONGO_DB: process.env.URI_MONGO_DB
 };
