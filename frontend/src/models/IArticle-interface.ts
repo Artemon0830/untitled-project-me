@@ -30,6 +30,8 @@
     updatedAt?: string;
 }
 
+export type IProductCreateArticle = Pick<IProductArticle,"available"|"category"|"currency"|"price"|"title"|"content"|"description"|"stockQuantity"|"oldPrice">
+
     export enum ProductCategory {
         ELECTRONICS = 'electronics',
         CLOTHING = 'clothing',

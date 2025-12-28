@@ -9,8 +9,9 @@ const axiosInstance=axios.create({
 const getAllUsers=():Promise<AxiosResponse<IUserInterface[]>> =>{
     return axiosInstance.get('/users')
 }
-const getUser=(userId:number):Promise<AxiosResponse<IUserInterface>> =>{
-    return axiosInstance.get('/users/'+ userId)
+const getUser= async(userId:string):Promise<AxiosResponse<IUserInterface>> =>{
+    const response= await axiosInstance.get('/users/'+ userId)
+    return response.data
 } 
 const getAllArticles=():Promise<AxiosResponse<IProductArticle[]>>=>{
     return axiosInstance.get('/articles')

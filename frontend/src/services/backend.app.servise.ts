@@ -1,5 +1,6 @@
 import axios from "axios"
 import {ISignInData, ISignUpData, IUserWithTokens} from "../models/IUserWithTokens";
+import { IProductArticle, IProductCreateArticle } from "../models/IArticle-interface";
 
 const axiosInstance = axios.create({
     baseURL:'http://localhost:8889',
@@ -26,5 +27,13 @@ const signUp = async (data:ISignUpData)=>{
         console.log(e);
     }
 }
+const createArticle = async(data:IProductCreateArticle)=>{
+    try{
+        const response = await axiosInstance.post<IProductArticle>('/articles/create',data,{})
+        return response.data
+    }catch(e){
+        console.log(e)
+    }
+}
 
-export {signIn,signUp}
+export {signIn,signUp,createArticle}
