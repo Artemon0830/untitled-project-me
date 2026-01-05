@@ -1,23 +1,50 @@
 import axios, {AxiosResponse} from "axios";
 import {IUserInterface} from "../models/IUser-interface";
-import { IProductArticle } from "../models/IArticle-interface";
+import {IProductArticle} from "../models/IArticle-interface";
+import {retriveLocalStorage} from "../helpers/helpers";
+import {IUserWithTokens} from "../models/IUserWithTokens";
 
 const axiosInstance=axios.create({
     baseURL: '/api',
 })
+axiosInstance.interceptors.request.use(request=>{
+ const stored = retriveLocalStorage<IUserWithTokens>('user');
+ if(stored?.tokens?.accessToken){
+    request.headers.Authorization = `Bearer ${stored.tokens.accessToken}`
+ }
+    return request
+})
 
-const getAllUsers=():Promise<AxiosResponse<IUserInterface[]>> =>{
-    return axiosInstance.get('/users')
-}
-const getUser= async(userId:string):Promise<AxiosResponse<IUserInterface>> =>{
-    const response= await axiosInstance.get('/users/'+ userId)
-    return response.data
-} 
-const getAllArticles=():Promise<AxiosResponse<IProductArticle[]>>=>{
-    return axiosInstance.get('/articles')
-}
-const getArticle=(articleId:number):Promise<AxiosResponse<IProductArticle>>=>{
-    return axiosInstance.get('/articles'+articleId)
+const usersService = {
+
+        async getAllUsers(): Promise<AxiosResponse<IUserInterface[]>> {
+            return await axiosInstance.get('/users')
+        },
+        async getUser(userId: string): Promise<AxiosResponse<IUserInterface>> {
+            return await axiosInstance.get('/users/'+userId)
+        }
+
+};
+const articleService ={
+        async getAllArticles():Promise<AxiosResponse<IProductArticle[]>>{
+            let {data} = await axiosInstance.get('/articles');
+            return data
+        },
+        async getArticle(articleId:string):Promise<AxiosResponse<IProductArticle>> {
+            let {data} = await axiosInstance.get('/articles'+articleId);
+            return data
+        }
+
+
 }
 
-export {getAllUsers,getUser,getAllArticles,getArticle}
+
+
+
+
+export {usersService,articleService}
+
+
+
+
+

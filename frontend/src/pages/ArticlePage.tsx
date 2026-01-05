@@ -1,20 +1,18 @@
-import React, { useEffect, useState } from "react";
-import { useParams } from "react-router";
-import { IUserInterface } from "../models/IUser-interface";
-import UserComponent from "../components/UserComponent";
-import { getUser } from "../services/user.service.api";
+import React, {useEffect, useState} from "react";
+import {useParams} from "react-router";
+import {articleService} from "../services/user.service.api";
 import ArticleComponent from "../components/ArticleComponent";
-import { IProductArticle } from "../models/IArticle-interface";
+import {IProductArticle} from "../models/IArticle-interface";
 
 const ArticlePage = () => {
-  const { id } = useParams<{ id: string }>();
+  const { articleId } = useParams<{ articleId: string }>();
   const [article,setArticle] = useState<IProductArticle | null>(null);
 
   useEffect(() => {
-    if (id) return;
-     getUser("id").then(value =>setArticle)
+    if (articleId) return;
+     articleService.getArticle('articleId').then(value => setArticle(value.data))
 
-  }, [id]);
+  }, [articleId]);
 
   if (!article) {
     return <div>Loading article...</div>;

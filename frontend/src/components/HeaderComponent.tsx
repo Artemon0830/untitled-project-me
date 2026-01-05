@@ -1,13 +1,21 @@
-import React from 'react';
+import React, {FC} from 'react';
 import {NavLink} from "react-router-dom";
+import styles from "../css/header.module.css"
+type HeaderTypeProps={
+    icon?:string
+}
+const HeaderComponent:FC<HeaderTypeProps> = ({icon}) => {
 
-const HeaderComponent = () => {
     return (
         <div>
-            <NavLink to={'/'}>home</NavLink>
-            <NavLink to={'/users'}>users</NavLink>
-            <NavLink to={'/auth/sign-up'}>register</NavLink>
-            <NavLink to={'/auth/sign-in'}>login</NavLink>
+            <ul className={styles.menu}>
+                <li><NavLink to={'/'}>home</NavLink></li>
+                <li><NavLink to={'/users'}>users</NavLink></li>
+                <li><NavLink to={'/auth/sign-up'}>register</NavLink></li>
+                <li><NavLink to={'/auth/sign-in'}>login</NavLink></li>
+                <li><NavLink to={'articles/create'}>createArticle</NavLink></li>
+                {icon && <li>{icon}</li>}
+            </ul>
 
         </div>
     );

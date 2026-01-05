@@ -2,6 +2,8 @@ import React from "react";
 import {useForm} from "react-hook-form";
 import {signIn} from "../services/backend.app.servise";
 import {ISignInData} from "../models/IUserWithTokens";
+import {useOutletContext} from "react-router";
+import {useNavigate} from "react-router-dom";
 
 const FormSignInComponent = () => {
 
@@ -10,10 +12,17 @@ const FormSignInComponent = () => {
         register,
         formState: { errors, isValid }
     } = useForm<ISignInData>({mode: "all",});
-
+ let loadIcon = useOutletContext<(iconLink:string)=>void>();
+     let navigate = useNavigate();
     const customerData = async (data: ISignInData) => {
-        await signIn(data);
-        console.log(data);
+        try {
+            const response = await signIn(data)
+            loadIcon(response.user.email)
+            navigate(`/users/${response.user._id}`);
+            console.log(data);
+        } catch (e) {
+
+        }
     };
 
     return (

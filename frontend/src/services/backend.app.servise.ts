@@ -1,32 +1,40 @@
-import axios from "axios"
+import axios, {AxiosResponse} from "axios"
 import {ISignInData, ISignUpData, IUserWithTokens} from "../models/IUserWithTokens";
 import { IProductArticle, IProductCreateArticle } from "../models/IArticle-interface";
 
 const axiosInstance = axios.create({
-    baseURL:'http://localhost:8889',
+    baseURL:'/api',
 
 });
 
-const signIn = async (data:ISignInData)=>{
+const signIn = async (
+    data: ISignInData
+): Promise<IUserWithTokens> => {
     try {
-        const userWithToken = await axiosInstance.post<IUserWithTokens>('/auth/sign-in', data, {});
-        console.log(userWithToken);
-        localStorage.setItem('user', JSON.stringify(userWithToken.data));
-        return userWithToken.data;
+        const response = await axiosInstance.post<IUserWithTokens>(
+            "/auth/sign-in",
+            data
+        );
+
+        localStorage.setItem("user", JSON.stringify(response.data));
+        return response.data;
+
     } catch (e) {
-        console.log(e);
+        console.error(e);
+        throw e; // ← REQUIRED
     }
-}
-const signUp = async (data:ISignUpData)=>{
-    try {
-        const userWithToken = await axiosInstance.post<IUserWithTokens>('/auth/sign-up', data, {});
-        console.log(userWithToken);
-        localStorage.setItem('user', JSON.stringify(userWithToken.data));
-        return userWithToken.data;
-    }catch (e){
-        console.log(e);
-    }
-}
+};
+
+const signUp = async (data: ISignUpData): Promise<IUserWithTokens> => {
+    const { data: user } = await axiosInstance.post<IUserWithTokens>(
+        '/auth/sign-up',
+        data
+    );
+
+    localStorage.setItem('user', JSON.stringify(user));
+    return user;
+};
+
 const createArticle = async(data:IProductCreateArticle)=>{
     try{
         const response = await axiosInstance.post<IProductArticle>('/articles/create',data,{})

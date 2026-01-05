@@ -2,6 +2,7 @@ import * as jsonwebtoken from 'jsonwebtoken';
 import {ITokenPair, ITokenPayload} from "../interfaces/token.interface";
 import {configs} from "../config/configs";
 import {ApiError} from "../errors/api-error";
+import {TokenTypeEnum} from "../enums/token.type.enum";
 
 
 class TokenService {
@@ -23,9 +24,20 @@ class TokenService {
     }
 
 
-  public async verifyToken(token:string):Promise<ITokenPayload>{
+  public async verifyToken(token:string,type:TokenTypeEnum):Promise<ITokenPayload>{
         try {
-            return  jsonwebtoken.verify(token,configs.JWT_ACCESS_SECRET) as ITokenPayload;
+            let secret: string;
+            switch (type){
+                case TokenTypeEnum.ACCESS:
+              secret=configs.JWT_ACCESS_SECRET
+              break;
+                case TokenTypeEnum.REFRESH:
+               secret =configs.JWT_REFRESH_SECRET;
+               break;
+                default:
+                    throw new ApiError("Invalid token type", 400);
+            }
+            return  jsonwebtoken.verify(token,secret) as ITokenPayload;
         }catch (e){
             throw new ApiError('Invalid token',401);
         }

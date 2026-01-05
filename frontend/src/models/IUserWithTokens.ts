@@ -1,19 +1,23 @@
-import {RoleEnum} from "./enums/role.enum";
+
 
 export interface IUserWithTokens {
-    _id?:number;
-    name:string;
-    age:number;
-    email:string;
-    password:string;
-    phone?:string;
-    role:RoleEnum;
-    isVerified:boolean;
-    isDeleted:boolean;
-    createdAt?:Date;
-    updatedAt?:Date;
-    accessToken:string;
-    refreshToken:string;
+    user: IUser;
+    tokens: ITokens;
+}
+export interface IUser {
+    _id: string;
+    name: string;
+    email: string;
+    age: number;
+    role: string;
+    isVerified: boolean;
+    isDeleted: boolean;
+    createdAt: string;
+    updatedAt: string;
+}
+export interface ITokens {
+    accessToken: string;
+    refreshToken: string;
 }
 export interface ISignInData {
     email:string;

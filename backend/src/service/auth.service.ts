@@ -21,7 +21,7 @@ class AuthService {
         const password = await passwordService.hashPassword(dto.password);
         const user = await userRepository.createUser({...dto,password});
           const tokens=await tokenService.generateTokens({userId:user._id,role:user.role});
-          await tokenRepository.createToken({...tokens,_userId:user._id});
+          await tokenRepository.create({...tokens,_userId:user._id});
         return {user,tokens};
     }
     async signIn(dto:ISignIn):Promise<{user:IUser,tokens:ITokenPair}> {
@@ -37,7 +37,7 @@ class AuthService {
             throw new ApiError("Invalid password",401)
         }
         const tokens=await tokenService.generateTokens({userId:user._id,role:user.role});
-        await tokenRepository.createToken({...tokens,_userId:user._id});
+        await tokenRepository.create({...tokens,_userId:user._id});
         return {user,tokens};
     }
 

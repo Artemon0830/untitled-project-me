@@ -1,0 +1,34 @@
+import {NextFunction, Request, Response} from "express";
+import {ApiError} from "../errors/api-error";
+import {tokenService} from "../service/token.service";
+import {TokenTypeEnum} from "../enums/token.type.enum";
+import {tokenRepository} from "../repositories/token.repository";
+
+class AuthMiddleware {
+    public async checkAccessToken(res:Response,req:Request,next:NextFunction){
+        try {
+            const header = req.headers.authorization;
+            if(!header){
+                throw new ApiError("Token is not provided", 401)
+            }
+            const accessToken =header.split("Bearer ")[1];
+
+            const payload= await tokenService.verifyToken(
+                accessToken,TokenTypeEnum.ACCESS
+            )
+            const pair =await tokenRepository.findByParams({accessToken});
+            if(!pair){
+                throw new ApiError('Token is not valid',401)
+            }
+
+            req.res.locals.tokenId=pair._id;
+            req.res.locals.jwtPayload=payload;
+            next()
+        }
+        catch (e) {
+            next(e)
+        }
+    }
+}
+
+export const authMiddleware =new AuthMiddleware();

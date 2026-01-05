@@ -2,7 +2,7 @@
  import {RoleEnum} from "../enums/role.enum";
 
 export interface IUser{
-    _id?:string;
+    _id:string;
     name:string;
     age:number;
     email:string;

@@ -1,19 +1,31 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
+import { IUserInterface } from "../models/IUser-interface";
+import { usersService } from "../services/user.service.api";
 import UserComponent from "./UserComponent";
-import {IUserInterface} from "../models/IUser-interface";
-import {getAllUsers} from "../services/user.service.api";
+import { useNavigate } from "react-router-dom";
 
 const UsersComponent = () => {
-    const [users, setUsers] = useState<IUserInterface[]>([])
-    const [userId, setUserId] = useState<IUserInterface>({} as IUserInterface)
+    const [users, setUsers] = useState<IUserInterface[]>([]);
+    const navigate = useNavigate();
+
     useEffect(() => {
-       getAllUsers().then(value => setUsers([...value.data]))
-    }, [])
+        usersService.getAllUsers().then(res => setUsers(res.data));
+    }, []);
+
+    const clickHandler = (id: string) => {
+        navigate(`/users/${id}`);
+    };
 
     return (
         <div>
             <h1>Users:</h1>
-            {users.map(user=><div><UserComponent user={user}/></div>)}
+            {users.map(user => (
+                <UserComponent
+                    key={user._id}
+                    user={user}
+                    clickHandler={clickHandler}
+                />
+            ))}
         </div>
     );
 };

@@ -3,9 +3,9 @@ import {IUserInterface} from "../models/IUser-interface";
 
 
 interface IProps {
-  user:IUserInterface
+  user:IUserInterface ,clickHandler:(_id:string)=>void;
 }
-const UserComponent:FC<IProps> = ({user}) => {
+const UserComponent:FC<IProps> = ({user,clickHandler}) => {
     return (
         <div>
             <ul>
@@ -13,6 +13,7 @@ const UserComponent:FC<IProps> = ({user}) => {
             </ul>
             <p>name:{user.name}</p>
             <p>userId:{user._id}</p>
+            <button onClick={()=>clickHandler(`${user._id}`)}>details</button>
         </div>
     );
 };

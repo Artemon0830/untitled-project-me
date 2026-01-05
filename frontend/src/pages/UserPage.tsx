@@ -1,28 +1,28 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router";
+import { useParams } from "react-router-dom";
 import { IUserInterface } from "../models/IUser-interface";
-import UserComponent from "../components/UserComponent";
-import { getUser } from "../services/user.service.api";
+import { usersService } from "../services/user.service.api";
 
 const UserPage = () => {
-  const { id } = useParams<{ id: string }>();
-  const [user, setUser] = useState<IUserInterface | null>(null);
+    const { userId } = useParams<{ userId: string }>();
+    const [user, setUser] = useState<IUserInterface | null>(null);
 
-  useEffect(() => {
-    if (!id) return;
-     getUser(id).then(value =>setUser)
+    useEffect(() => {
+        if (!userId) return;
 
-  }, [id]);
+        usersService.getUser(userId).then(res => setUser(res.data));
+    }, [userId]);
 
-  if (!user) {
-    return <div>Loading user...</div>;
-  }
+    if (!user) return <div>Loading...</div>;
 
-  return (
-    <div>
-      <UserComponent user={user}/>
-    </div>
-  );
+    return (
+        <div>
+            <h2>{user.name}</h2>
+            <p>{user.email}</p>
+            <p>ID: {user._id}</p>
+        </div>
+    );
 };
 
 export default UserPage;
+
