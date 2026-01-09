@@ -1,8 +1,7 @@
 import axios, {AxiosResponse} from "axios";
-import {IUserInterface} from "../models/IUser-interface";
-import {IProductArticle} from "../models/IArticle-interface";
+import {IProductArticle, IProductArticleWithUser, IProductCreateArticle} from "../models/IArticle-interface";
 import {retriveLocalStorage} from "../helpers/helpers";
-import {IUserWithTokens} from "../models/IUserWithTokens";
+import {IUser, IUserWithTokens} from "../models/IUserWithTokens";
 
 const axiosInstance=axios.create({
     baseURL: '/api',
@@ -17,26 +16,37 @@ axiosInstance.interceptors.request.use(request=>{
 
 const usersService = {
 
-        async getAllUsers(): Promise<AxiosResponse<IUserInterface[]>> {
+        async getAllUsers(): Promise<AxiosResponse<IUser[]>> {
             return await axiosInstance.get('/users')
         },
-        async getUser(userId: string): Promise<AxiosResponse<IUserInterface>> {
+        async getUser(userId: string): Promise<AxiosResponse<IUser>> {
             return await axiosInstance.get('/users/'+userId)
         }
 
 };
-const articleService ={
-        async getAllArticles():Promise<AxiosResponse<IProductArticle[]>>{
-            let {data} = await axiosInstance.get('/articles');
-            return data
-        },
-        async getArticle(articleId:string):Promise<AxiosResponse<IProductArticle>> {
-            let {data} = await axiosInstance.get('/articles'+articleId);
-            return data
+const articleService = {
+    async getAllArticles(): Promise<AxiosResponse<IProductArticle[]>> {
+        return await axiosInstance.get('/articles');
+
+    },
+    async getArticle(articleId: string): Promise<AxiosResponse<IProductArticle>> {
+        return await axiosInstance.get('/articles/' + articleId);
+    },
+    async createArticle(data: IProductCreateArticle): Promise<IProductArticleWithUser> {
+        try {
+            const response = await axiosInstance.post<IProductArticleWithUser>(
+                '/articles/create',
+                data
+            )
+            return response.data
+        } catch (error) {
+            console.error(error)
+            throw error
         }
+    }
 
+};
 
-}
 
 
 

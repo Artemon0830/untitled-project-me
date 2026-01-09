@@ -1,9 +1,10 @@
 import React, {FC} from 'react';
-import {IUserInterface} from "../models/IUser-interface";
+import {IUser} from "../models/IUserWithTokens";
+
 
 
 interface IProps {
-  user:IUserInterface ,clickHandler:(_id:string)=>void;
+  user:IUser ,clickHandler:(_id:string)=>void;
 }
 const UserComponent:FC<IProps> = ({user,clickHandler}) => {
     return (
@@ -11,7 +12,7 @@ const UserComponent:FC<IProps> = ({user,clickHandler}) => {
             <ul>
                 <li>email:{user.email}</li>
             </ul>
-            <p>name:{user.name}</p>
+            <p>name:{user.userName}</p>
             <p>userId:{user._id}</p>
             <button onClick={()=>clickHandler(`${user._id}`)}>details</button>
         </div>
