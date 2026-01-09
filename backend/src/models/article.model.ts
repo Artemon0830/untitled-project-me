@@ -2,14 +2,12 @@ import {model, Schema} from "mongoose";
 
 
 import {Currency, IProductArticle, ProductCategory} from "../interfaces/article.interface";
+import {User} from "./user.model";
 
 
 const articleSchema = new Schema({
-
-    id:{type:String,required:true},
-
     title:{type:String,required:true},
-    slug:{type:String,required:true},
+    slug:{type:String,required:false},
     description:{type:String,required:true},
     content:{type:String,required:true},
 
@@ -19,12 +17,12 @@ const articleSchema = new Schema({
 
     available: {type:Boolean,default:false},
     stockQuantity: {type:Number,required:true},
-    sku: {type:String,required:true},
+    sku: {type:String,required:false},
 
     category: {type:String,enum:Object.values(ProductCategory),required:true},
     tags:{type:[String], required:false},
         coverImage: {type:String, required:false},
-        _userId: {type: Schema.Types.ObjectId, required: true, ref: 'User'},
+        _userId: {type: Schema.Types.ObjectId, required: true, ref: User},
 
     images: {type:[String], required:false},
         views:{type:Number,required:false},

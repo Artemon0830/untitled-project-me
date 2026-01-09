@@ -1,17 +1,19 @@
-import React, {useEffect, useState} from "react";
-import {useParams} from "react-router";
-import {articleService} from "../services/user.service.api";
-import ArticleComponent from "../components/ArticleComponent";
-import {IProductArticle} from "../models/IArticle-interface";
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router";
+import { articleService } from "../services/user.service.api";
+import { IProductArticle } from "../models/IArticle-interface";
 
 const ArticlePage = () => {
-  const { articleId } = useParams<{ articleId: string }>();
-  const [article,setArticle] = useState<IProductArticle | null>(null);
-
+  const {articleId} = useParams<{ articleId: string }>();
+  const [article, setArticle] = useState<IProductArticle | null>(null);
+  console.log(articleId)
   useEffect(() => {
-    if (articleId) return;
-     articleService.getArticle('articleId').then(value => setArticle(value.data))
+    if (!articleId) return;
 
+    articleService.getArticle(articleId).then(res => {
+      setArticle(res.data);
+      console.log(res.data)
+    });
   }, [articleId]);
 
   if (!article) {
@@ -19,9 +21,11 @@ const ArticlePage = () => {
   }
 
   return (
-    <div>
-      <ArticleComponent article={article}/>
-    </div>
+      <div>
+        <div>ID: {article._id}</div>
+        <div>Title: {article.title}</div>
+        <div>Price: {article.price}</div>
+      </div>
   );
 };
 

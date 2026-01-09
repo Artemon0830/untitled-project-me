@@ -1,6 +1,6 @@
 
     export interface IProductArticle {
-    id: string;
+    _id: string;
 
     title: string;
     slug: string;
@@ -30,6 +30,16 @@
     updatedAt?: string;
 }
 
+    export interface IProductCreateArticle {
+        title: string;
+        description: string;
+        content: string;
+        category: ProductCategory;
+        price: number;
+        currency: Currency;
+        stockQuantity: number;
+        oldPrice?: number;
+    }
     export enum ProductCategory {
         ELECTRONICS = 'electronics',
         CLOTHING = 'clothing',
