@@ -12,12 +12,12 @@ const FormSignInComponent = () => {
         register,
         formState: { errors, isValid }
     } = useForm<ISignInData>({mode: "all",});
- let loadIcon = useOutletContext<(iconLink:string)=>void>();
+ let loadEmail = useOutletContext<(emailLink:string)=>void>();
      let navigate = useNavigate();
     const customerData = async (data: ISignInData) => {
         try {
             const response = await signIn(data)
-            loadIcon(response.user.email)
+            loadEmail(response.user.email)
             navigate(`/users/${response.user._id}`);
             console.log(data);
         } catch (e) {

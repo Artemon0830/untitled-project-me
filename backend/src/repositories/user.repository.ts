@@ -13,11 +13,11 @@ class UserRepository {
     }
 
 
-    public async updateUserById(userId: string, dto: IUser): Promise<IUser> {
+    public async updateMe(userId: string, dto: IUser): Promise<IUser> {
         return await User.findByIdAndUpdate(userId, dto, { new: true });
     }
 
-    public async deleteUserById(userId: string): Promise<void> {
+    public async deleteMe(userId: string): Promise<void> {
         await User.deleteOne({ _id: userId });
     }
     public async getUserByEmail(email:string): Promise<IUser | null> {

@@ -3,6 +3,7 @@ import {NextFunction, Request, Response} from "express";
 
 import {userService} from "../service/user.service";
 import {IUser} from "../interfaces/user.interface";
+import {ITokenPayload} from "../interfaces/token.interface";
 
 
 class UserController {
@@ -19,12 +20,22 @@ class UserController {
         } catch (e) {
             next(e)
         }
-    }
-    async updateUser(req: Request, res: Response,next:NextFunction) {
+    }async getMe(req: Request, res: Response,next:NextFunction) {
         try {
-            const userId = req.params.userId;
+            const jwtPayload= req.res.locals.jwtPayload as ITokenPayload;
+            console.log(jwtPayload)
+            const result = await userService.getMe(jwtPayload);
+            res.send(result)
+        } catch (e) {
+            next(e)
+        }
+    }
+
+    async updateMe(req: Request, res: Response,next:NextFunction) {
+        try {
+           const jwtPayload = req.res.locals.jwtPayload
             const dto = req.body as IUser;
-            const result = await userService.updateUser(userId, dto);
+            const result = await userService.updateMe(jwtPayload, dto);
             res.send(result)
         } catch (e) {
             next(e)
@@ -32,10 +43,10 @@ class UserController {
 
     }
 
-    async deleteUser(req: Request, res: Response,next:NextFunction) {
+    async deleteMe(req: Request, res: Response,next:NextFunction) {
         try {
-            const userId = req.params.userId;
-            const result = await userService.deleteUser(userId);
+            const jwtPayload = req.res.locals.jwtPayload
+            const result = await userService.deleteMe(jwtPayload);
             res.send(result)
         } catch (e) {
             next(e)

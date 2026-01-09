@@ -4,20 +4,11 @@ import {ApiError} from "../errors/api-error";
 import {passwordService} from "./password.service";
 import {tokenService} from "./token.service";
 import {tokenRepository} from "../repositories/token.repository";
-import {ITokenPair} from "../interfaces/token.interface";
+import {ITokenPair, ITokenPayload} from "../interfaces/token.interface";
 
 
 class AuthService {
     async signUp(dto:Partial<IUser>):Promise<{user:IUser,tokens:ITokenPair}> {
-        if(!dto.name || dto.name.length < 3){
-            throw new ApiError("Name is required and should be at least 3 characters long",404)
-        }
-        if(!dto.email || !dto.email.includes("@")){
-            throw new ApiError("Email is required and should be valid", 400);
-        }
-        if (!dto.password || dto.password.length <6){
-            throw new ApiError("Password is requi+red and should be at least 6 characters long",400)
-        }
         const password = await passwordService.hashPassword(dto.password);
         const user = await userRepository.createUser({...dto,password});
           const tokens=await tokenService.generateTokens({userId:user._id,role:user.role});
@@ -25,9 +16,6 @@ class AuthService {
         return {user,tokens};
     }
     async signIn(dto:ISignIn):Promise<{user:IUser,tokens:ITokenPair}> {
-        if(!dto.email || !dto.password){
-            throw new ApiError("Email and password are required",400)
-        }
         const user = await userRepository.getUserByEmail(dto.email);
         if(!user){
             throw new ApiError("User not found",404)
@@ -36,9 +24,21 @@ class AuthService {
         if(!isPasswordValid){
             throw new ApiError("Invalid password",401)
         }
+        await tokenRepository.deleteByUserId(user._id)
+
         const tokens=await tokenService.generateTokens({userId:user._id,role:user.role});
         await tokenRepository.create({...tokens,_userId:user._id});
         return {user,tokens};
+    }
+    async refresh(refreshToken:string,payload:ITokenPayload):Promise<ITokenPair> {
+        await tokenRepository.deleteOneByParams({refreshToken});
+        const tokens = tokenService.generateTokens({userId:payload.userId,role:payload.role})
+        await tokenRepository.create({...tokens,_userId:payload.userId})
+        return tokens;
+    }
+    async logout(tokenId:string,jwtPayload:ITokenPayload)
+    { const user =await userRepository.getUserById(jwtPayload.userId);
+      return await  tokenRepository.deleteOneByParams({_id:tokenId,_userId:user._id})
     }
 
 }

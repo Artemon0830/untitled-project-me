@@ -4,14 +4,14 @@ import HeaderComponent from "../components/HeaderComponent";
 import FooterComponent from "../components/FooterComponent";
 
 const MainLayout = () => {
-    const [icon, setIcon] = useState<string>('')
-    const loadIcon= (iconLink:string)=>{
-        setIcon(iconLink)
+    const [email, setEmail] = useState<string>('')
+    const loadEmail= (emailLink:string)=>{
+        setEmail(emailLink)
     }
     return (
         <div>
-            <HeaderComponent icon={icon}/>
-            <Outlet context={loadIcon}/>
+            <HeaderComponent email={email}/>
+            <Outlet context={loadEmail}/>
             <FooterComponent/>
 
         </div>

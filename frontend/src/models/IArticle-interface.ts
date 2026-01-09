@@ -1,5 +1,6 @@
+import {IUser} from "./IUserWithTokens";
 
-    export interface IProductArticle {
+export interface IProductArticle {
     _id: string;
 
     title: string;
@@ -30,7 +31,22 @@
     updatedAt?: string;
 }
 
-export type IProductCreateArticle = Pick<IProductArticle,"available"|"category"|"currency"|"price"|"title"|"content"|"description"|"stockQuantity"|"oldPrice">
+export interface IProductArticleWithUser{
+    article:IProductArticle;
+    user:IUser;
+}
+
+export interface IProductCreateArticle {
+    title: string;
+    description: string;
+    content: string;
+    category: ProductCategory;
+    price: number;
+    currency: Currency;
+    stockQuantity: number;
+    oldPrice?: number;
+}
+
 
     export enum ProductCategory {
         ELECTRONICS = 'electronics',

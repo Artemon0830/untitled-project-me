@@ -24,6 +24,12 @@ class TokenRepository {
         });
         return deletedCount;
     }
+    public async deleteByUserId(userId:string):Promise<void>{
+        await Token.deleteMany({_userId:userId})
+    }
+    public async logout(token:string,userId:string):Promise<void>{
+        await Token.deleteMany({accessToken:token,_userId:userId})
+    }
 }
 
 export const tokenRepository = new TokenRepository();

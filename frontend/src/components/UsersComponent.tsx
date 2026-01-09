@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react';
-import { IUserInterface } from "../models/IUser-interface";
-import { usersService } from "../services/user.service.api";
+import React, {useEffect, useState} from 'react';
+import {usersService} from "../services/user.service.api";
 import UserComponent from "./UserComponent";
-import { useNavigate } from "react-router-dom";
+import {useNavigate} from "react-router-dom";
+import {IUser} from "../models/IUserWithTokens";
 
 const UsersComponent = () => {
-    const [users, setUsers] = useState<IUserInterface[]>([]);
+    const [users, setUsers] = useState<IUser[]>([]);
     const navigate = useNavigate();
 
     useEffect(() => {

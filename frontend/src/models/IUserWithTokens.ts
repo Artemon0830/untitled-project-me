@@ -6,7 +6,7 @@ export interface IUserWithTokens {
 }
 export interface IUser {
     _id: string;
-    name: string;
+    userName: string;
     email: string;
     age: number;
     role: string;
@@ -24,7 +24,7 @@ export interface ISignInData {
     password:string;
 }
 export interface ISignUpData  {
-    name:string;
+    userName:string;
     age:number;
     email:string;
     password:string;

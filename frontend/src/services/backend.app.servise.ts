@@ -1,6 +1,5 @@
-import axios, {AxiosResponse} from "axios"
+import axios from "axios"
 import {ISignInData, ISignUpData, IUserWithTokens} from "../models/IUserWithTokens";
-import { IProductArticle, IProductCreateArticle } from "../models/IArticle-interface";
 
 const axiosInstance = axios.create({
     baseURL:'/api',
@@ -35,13 +34,7 @@ const signUp = async (data: ISignUpData): Promise<IUserWithTokens> => {
     return user;
 };
 
-const createArticle = async(data:IProductCreateArticle)=>{
-    try{
-        const response = await axiosInstance.post<IProductArticle>('/articles/create',data,{})
-        return response.data
-    }catch(e){
-        console.log(e)
-    }
-}
 
-export {signIn,signUp,createArticle}
+
+
+export {signIn,signUp}

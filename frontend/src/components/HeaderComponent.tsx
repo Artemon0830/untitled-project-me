@@ -2,9 +2,9 @@ import React, {FC} from 'react';
 import {NavLink} from "react-router-dom";
 import styles from "../css/header.module.css"
 type HeaderTypeProps={
-    icon?:string
+    email?:string
 }
-const HeaderComponent:FC<HeaderTypeProps> = ({icon}) => {
+const HeaderComponent:FC<HeaderTypeProps> = ({email}) => {
 
     return (
         <div>
@@ -14,7 +14,9 @@ const HeaderComponent:FC<HeaderTypeProps> = ({icon}) => {
                 <li><NavLink to={'/auth/sign-up'}>register</NavLink></li>
                 <li><NavLink to={'/auth/sign-in'}>login</NavLink></li>
                 <li><NavLink to={'articles/create'}>createArticle</NavLink></li>
-                {icon && <li>{icon}</li>}
+                <li><NavLink to={'articles'}>article</NavLink></li>
+
+                {email && <li>{email}</li>}
             </ul>
 
         </div>

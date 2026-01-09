@@ -1,8 +1,9 @@
 import React from "react";
 import { useForm } from "react-hook-form";
-import { Currency, IProductCreateArticle, ProductCategory } from "../models/IArticle-interface";
+import {Currency, IProductCreateArticle, ProductCategory} from "../models/IArticle-interface";
 import { useNavigate } from "react-router";
-import { createArticle } from "../services/backend.app.servise";
+import {articleService} from "../services/user.service.api";
+
 
 const FormCreateArticle = () => {
   const navigate = useNavigate();
@@ -17,8 +18,10 @@ const FormCreateArticle = () => {
 
   const onSubmit = async (data: IProductCreateArticle) => {
     try {
-      const createdArticle = await createArticle(data);
-      navigate(`/articles/${createdArticle?._id}`);
+      const{article} =  await articleService.createArticle(data);
+      console.log(article)
+        console.log(data)
+      navigate(`/articles/${article._id}`);
     } catch (error) {
       console.error("Failed to create article", error);
     }
@@ -77,11 +80,6 @@ const FormCreateArticle = () => {
         {errors.stockQuantity && <span>{errors.stockQuantity.message}</span>}
       </label>
 
-      <label>
-        Available
-        <input type="checkbox" {...register("available")} />
-        {errors.available && <span>{errors.available.message}</span>}
-      </label>
       <button type="submit" disabled={!isValid}>
         Create
       </button>
